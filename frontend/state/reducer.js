@@ -1,6 +1,6 @@
 // ❗ You don't need to add extra reducers to achieve MVP
 import { combineReducers } from 'redux'
-import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, SET_INFO_MESSAGE, SET_QUIZ_INTO_STATE, SET_SELECTED_ANSWER } from './action-types'
+import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, SET_INFO_MESSAGE, SET_QUIZ_INTO_STATE, SET_SELECTED_ANSWER, INPUT_CHANGE, RESET_FORM } from './action-types'
 
 const initialWheelState = {
   location: [0, 1, 2, 3, 4, 5],
@@ -45,12 +45,6 @@ function quiz(state = initialQuizState, action) {
         message: '',
         selectedAnswer: action.payload,
       }
-    case SET_INFO_MESSAGE:
-      return {
-        ...state, 
-        loading: false, 
-        message: action.payload
-      }
     default:
       return state
   }
@@ -61,18 +55,18 @@ function quiz(state = initialQuizState, action) {
 //   return state
 // }
 
-// const initialMessageState = {
-//   message: ''
-// }
+const initialMessageState = {
+  message: ''
+}
 
-// function infoMessage(state = initialMessageState, action) {
-//   switch(action.type) {
-//     case SET_INFO_MESSAGE:
-//       return {message: action.payload}
-//     default:
-//       return state
-//   }
-// }
+function infoMessage(state = initialMessageState, action) {
+  switch(action.type) {
+    case SET_INFO_MESSAGE:
+      return {message: action.payload}
+    default:
+      return state
+  }
+}
 
 const initialFormState = {
   newQuestion: '',
@@ -80,7 +74,21 @@ const initialFormState = {
   newFalseAnswer: '',
 }
 function form(state = initialFormState, action) {
-  return state
+  switch(action.type) {
+    case INPUT_CHANGE:
+      return {
+        ...state,
+        [action.payload.name]: action.payload.value.trim()
+      }
+    case RESET_FORM:
+      return {
+        newQuestion: '',
+        newTrueAnswer: '',
+        newFalseAnswer: ''
+      }
+    default:
+      return state
+  }
 }
 
-export default combineReducers({ wheel, quiz, form })
+export default combineReducers({ wheel, quiz, form, infoMessage })

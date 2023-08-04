@@ -5,7 +5,9 @@ import {
   MOVE_COUNTERCLOCKWISE, 
   SET_SELECTED_ANSWER,
   SET_INFO_MESSAGE,
-  SET_QUIZ_INTO_STATE 
+  SET_QUIZ_INTO_STATE, 
+  INPUT_CHANGE,
+  RESET_FORM
 } from "./action-types"
 
 export function moveClockwise() {
@@ -26,13 +28,34 @@ export function selectAnswer(answer_id) {
   }
 }
 
-export function setMessage() { }
+export function setMessage(message) {
+  return function(dispatch) {
+    dispatch({
+      type: SET_INFO_MESSAGE,
+      payload: message
+    })
+  }
+}
 
 export function setQuiz() { }
 
-export function inputChange() { }
+export function inputChange(name, value) {
+  return function (dispatch) {
+    dispatch({
+      type: INPUT_CHANGE,
+      payload: {
+        name,
+        value
+      }
+    })
+  }
+}
 
-export function resetForm() { }
+export function resetForm() {
+  return function (dispatch) {
+    dispatch({type: RESET_FORM})
+  }
+}
 
 // ❗ Async action creators
 export function fetchQuiz() {
@@ -41,43 +64,14 @@ export function fetchQuiz() {
       dispatch({type: SET_QUIZ_INTO_STATE, payload: null})
       const response = await axios.get('http://localhost:9000/api/quiz/next')
       dispatch({type: SET_QUIZ_INTO_STATE, payload: response.data})
-      // dispatch({type: SET_INFO_MESSAGE, payload: ''})
     }
     catch (error) {
       console.error('Error fetching quiz: ', error)
       dispatch({type: SET_INFO_MESSAGE, payload: 'Failed to fetch quiz. Please try again.'})
     }
-    // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
-    // On successful GET:
-    // - Dispatch an action to send the obtained quiz to its state
   }
 }
-export function postAnswer(quiz_id, answer_id) {
-  return async function (dispatch) {
-      axios.post('http://localhost:9000/api/quiz/answer', {quiz_id, answer_id})
-        .then(res => {
-          dispatch({type: SET_SELECTED_ANSWER, payload: null})
-          dispatch({type: SET_INFO_MESSAGE, payload: res.data.message})
-          dispatch(fetchQuiz())
-        })
-        .catch(err => {
-          dispatch({type: SET_INFO_MESSAGE, payload: err.message})
-        })
-    //   const response = await axios.post('http://localhost:9000/api/quiz/answer', {quiz_id, answer_id})
-    //   dispatch({type: SET_SELECTED_ANSWER, payload: null})
-    //   dispatch({type: SET_INFO_MESSAGE, payload: response.data.message})
-    //   dispatch(fetchQuiz())
-    // }
-    // catch (error) {
-    //   console.error('Error posting answer: ', error)
-    //   dispatch({type: SET_INFO_MESSAGE, payload: 'Failed to submit answer. Please try again.'})
-    // }
-    // On successful POST:
-    // - Dispatch an action to reset the selected answer state
-    // - Dispatch an action to set the server message to state
-    // - Dispatch the fetching of the next quiz
-  }
-}
+
 export function postQuiz() {
   return function (dispatch) {
     // On successful POST:

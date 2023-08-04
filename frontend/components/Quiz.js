@@ -1,17 +1,20 @@
 import React, {useEffect} from 'react';
 import axios from 'axios'
 import { connect, useDispatch } from 'react-redux';
-import { selectAnswer, postAnswer, fetchQuiz } from '../state/action-creators';
+import { fetchQuiz } from '../state/action-creators';
 import { SET_SELECTED_ANSWER, SET_INFO_MESSAGE } from '../state/action-types';
 
 function Quiz(props) {
-  const { quiz, loading, selectedAnswer, message } = props;
-  console.log(props)
+  const { quiz, loading, selectedAnswer } = props;
   const dispatch = useDispatch()
 
+  const initialTask = () => {
+    if(!quiz) dispatch(fetchQuiz())
+  }
+
   useEffect(() => {
-    dispatch(fetchQuiz())
-  }, [dispatch])
+    initialTask()
+  }, [])
 
   const handleSubmitAnswer = (quiz_id, answer_id) => {
     axios.post('http://localhost:9000/api/quiz/answer', {quiz_id, answer_id})
@@ -58,7 +61,7 @@ const mapStateToProps = (state) => ({
   quiz: state.quiz.quiz,
   loading: state.quiz.loading,
   selectedAnswer: state.quiz.selectedAnswer,
-  message: state.quiz.message,
+  message: state.infoMessage.message,
 });
 
-export default connect(mapStateToProps, { selectAnswer, postAnswer, fetchQuiz })(Quiz);
+export default connect(mapStateToProps, { fetchQuiz })(Quiz);

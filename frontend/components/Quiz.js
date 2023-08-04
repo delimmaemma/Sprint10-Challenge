@@ -5,7 +5,7 @@ import { selectAnswer, postAnswer, fetchQuiz } from '../state/action-creators';
 export let quizId = 0
 
 function Quiz(props) {
-  const { quiz, loading, selectedAnswer,  infoMessage, selectAnswer, postAnswer } = props;
+  const { quiz, loading, selectedAnswer, infoMessage, selectAnswer, postAnswer } = props;
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -19,6 +19,8 @@ function Quiz(props) {
   const handleAnswerSelect = answer_id => {
     dispatch(selectAnswer(answer_id))
   }
+
+  console.log(infoMessage)
 
   return (
     <div id="wrapper">
@@ -41,11 +43,11 @@ function Quiz(props) {
           <button id="submitAnswerBtn" onClick={handleSubmitAnswer} disabled={!selectedAnswer}>
             Submit answer
           </button>
+          <p>{infoMessage}</p>
         </>
       ) : (
         <p>No quiz available.</p>
       )}
-      {infoMessage && <p>{infoMessage}</p>}
     </div>
   );
 }

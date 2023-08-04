@@ -50,11 +50,6 @@ function quiz(state = initialQuizState, action) {
   }
 }
 
-// const initialSelectedAnswerState = null
-// function selectedAnswer(state = initialSelectedAnswerState, action) {
-//   return state
-// }
-
 const initialMessageState = {
   message: ''
 }

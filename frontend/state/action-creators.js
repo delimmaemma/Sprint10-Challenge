@@ -41,7 +41,7 @@ export function fetchQuiz() {
       dispatch({type: SET_QUIZ_INTO_STATE, payload: null})
       const response = await axios.get('http://localhost:9000/api/quiz/next')
       dispatch({type: SET_QUIZ_INTO_STATE, payload: response.data})
-      dispatch({type: SET_INFO_MESSAGE, payload: ''})
+      // dispatch({type: SET_INFO_MESSAGE, payload: ''})
     }
     catch (error) {
       console.error('Error fetching quiz: ', error)

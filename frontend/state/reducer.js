@@ -26,7 +26,7 @@ function wheel(state = initialWheelState, action) {
 
 const initialQuizState = {
   quiz: null,
-  loading: true,
+  loading: false,
   selectedAnswer: null,
   message: ''
 }
@@ -37,7 +37,7 @@ function quiz(state = initialQuizState, action) {
       return {
         ...state,
         quiz: action.payload,
-        loading: true
+        loading: !action.payload
       }
     case SET_SELECTED_ANSWER:
       return {

@@ -38,7 +38,7 @@ export function resetForm() { }
 export function fetchQuiz() {
   return async function (dispatch) {
     try {
-      dispatch({type: SET_INFO_MESSAGE, payload: 'Loading next quiz...'})
+      dispatch({type: SET_QUIZ_INTO_STATE, payload: null})
       const response = await axios.get('http://localhost:9000/api/quiz/next')
       dispatch({type: SET_QUIZ_INTO_STATE, payload: response.data})
       dispatch({type: SET_INFO_MESSAGE, payload: ''})

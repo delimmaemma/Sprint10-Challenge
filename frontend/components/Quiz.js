@@ -1,24 +1,29 @@
 import React, {useEffect} from 'react';
+import axios from 'axios'
 import { connect, useDispatch } from 'react-redux';
 import { selectAnswer, postAnswer, fetchQuiz } from '../state/action-creators';
+import { SET_SELECTED_ANSWER, SET_INFO_MESSAGE } from '../state/action-types';
 
 function Quiz(props) {
-  const { quiz, loading, selectedAnswer, infoMessage, selectAnswer, postAnswer } = props;
+  const { quiz, loading, selectedAnswer } = props;
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchQuiz())
   }, [dispatch])
 
-  const handleSubmitAnswer = () => {
-    dispatch(postAnswer(quiz.quiz_id, selectAnswer));
+  const handleSubmitAnswer = (quiz_id, answer_id) => {
+    axios.post('http://localhost:9000/api/quiz/answer', {quiz_id, answer_id})
+      .then(
+        res => {
+          dispatch({type: SET_SELECTED_ANSWER, payload: null})
+          dispatch({type: SET_INFO_MESSAGE, payload: res.data.message})
+          dispatch(fetchQuiz())
+        })
+        .catch(err => {
+          dispatch({type: SET_INFO_MESSAGE, payload: err.message})
+        })
   };
-
-  const handleAnswerSelect = (answer_id) => {
-    dispatch(selectAnswer(answer_id))
-  }
-
-  console.log(infoMessage)
 
   return (
     <div id="wrapper">
@@ -31,16 +36,15 @@ function Quiz(props) {
             {quiz.answers.map((answer) => (
               <div className={`answer ${selectedAnswer === answer.answer_id ? 'selected' : ''}`} key={answer.answer_id}>
                 {answer.text}
-                <button onClick={() => handleAnswerSelect(answer.answer_id)}>
+                <button onClick={() => dispatch({type: SET_SELECTED_ANSWER, payload: answer.answer_id})}>
                   {selectedAnswer === answer.answer_id ? 'SELECTED' : 'Select'}
                 </button>
               </div>
             ))}
           </div>
-          <button id="submitAnswerBtn" onClick={handleSubmitAnswer} disabled={!selectedAnswer}>
+          <button id="submitAnswerBtn" onClick={() => handleSubmitAnswer(quiz.quiz_id, selectedAnswer)} disabled={!selectedAnswer}>
             Submit answer
           </button>
-          <p>{infoMessage}</p>
         </>
       ) : (
         <p>No quiz available.</p>

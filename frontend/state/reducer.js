@@ -26,9 +26,9 @@ function wheel(state = initialWheelState, action) {
 
 const initialQuizState = {
   quiz: null,
-  loading: false,
+  loading: true,
   selectedAnswer: null,
-  infoMessage: ''
+  message: ''
 }
 
 function quiz(state = initialQuizState, action) {
@@ -37,22 +37,19 @@ function quiz(state = initialQuizState, action) {
       return {
         ...state,
         quiz: action.payload,
-        loading: false
+        loading: true
       }
     case SET_SELECTED_ANSWER:
       return {
         ...state,
+        message: '',
         selectedAnswer: action.payload,
       }
     case SET_INFO_MESSAGE:
-      return action.payload === 'Loading next quiz...' ? {
-        ...state,
-        loading: true,
-        infoMessage: action.payload
-      } : {
+      return {
         ...state, 
         loading: false, 
-        infoMessage: action.payload
+        message: action.payload
       }
     default:
       return state
@@ -64,9 +61,17 @@ function selectedAnswer(state = initialSelectedAnswerState, action) {
   return state
 }
 
-const initialMessageState = ''
+const initialMessageState = {
+  message: ''
+}
+
 function infoMessage(state = initialMessageState, action) {
-  return state
+  switch(action.type) {
+    case SET_INFO_MESSAGE:
+      return {message: action.payload}
+    default:
+      return state
+  }
 }
 
 const initialFormState = {

@@ -2,19 +2,18 @@ import React, {useEffect} from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { selectAnswer, postAnswer, fetchQuiz } from '../state/action-creators';
 
+export let quizId = 0
+
 function Quiz(props) {
-  const { quiz, loading, selectedAnswer, selectedQuizId, infoMessage, selectAnswer, postAnswer } = props;
+  const { quiz, loading, selectedAnswer,  infoMessage, selectAnswer, postAnswer } = props;
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchQuiz())
   }, [dispatch])
 
-  console.log(props)
-
   const handleSubmitAnswer = () => {
-    console.log(selectedQuizId, selectedAnswer)
-    dispatch(postAnswer(selectedQuizId, selectedAnswer));
+    dispatch(postAnswer(quizId, selectedAnswer));
   };
 
   const handleAnswerSelect = answer_id => {
@@ -27,6 +26,7 @@ function Quiz(props) {
         <p>Loading next quiz...</p>
       ) : quiz ? (
         <>
+          {quizId = quiz.quiz_id}
           <h2>{quiz.question}</h2>
           <div id="quizAnswers">
             {quiz.answers.map((answer) => (

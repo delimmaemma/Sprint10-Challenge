@@ -52,10 +52,10 @@ export function fetchQuiz() {
     // - Dispatch an action to send the obtained quiz to its state
   }
 }
-export function postAnswer(answer, question) {
+export function postAnswer(answer_id, quiz_id) {
   return async function (dispatch) {
     try {
-      const response = await axios.post('http://localhost:9000/api/quiz/answer', {question, answer})
+      const response = await axios.post('http://localhost:9000/api/quiz/answer', {quiz_id, answer_id})
       dispatch({type: SET_SELECTED_ANSWER, payload: null})
       dispatch({type: SET_INFO_MESSAGE, payload: response.data.message})
       dispatch(fetchQuiz())

@@ -5,7 +5,8 @@ import { selectAnswer, postAnswer, fetchQuiz } from '../state/action-creators';
 import { SET_SELECTED_ANSWER, SET_INFO_MESSAGE } from '../state/action-types';
 
 function Quiz(props) {
-  const { quiz, loading, selectedAnswer } = props;
+  const { quiz, loading, selectedAnswer, message } = props;
+  console.log(props)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const mapStateToProps = (state) => ({
   quiz: state.quiz.quiz,
   loading: state.quiz.loading,
   selectedAnswer: state.quiz.selectedAnswer,
-  infoMessage: state.infoMessage,
+  message: state.quiz.message,
 });
 
 export default connect(mapStateToProps, { selectAnswer, postAnswer, fetchQuiz })(Quiz);

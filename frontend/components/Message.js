@@ -8,7 +8,7 @@ function Message(props) {
 }
 
 const mapStateToProps = state => ({
-  message: state.message
+  message: state.quiz.message
 })
 
 export default connect(mapStateToProps)(Message)

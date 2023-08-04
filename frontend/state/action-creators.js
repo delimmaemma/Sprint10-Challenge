@@ -52,7 +52,7 @@ export function fetchQuiz() {
     // - Dispatch an action to send the obtained quiz to its state
   }
 }
-export function postAnswer(answer_id, quiz_id) {
+export function postAnswer(quiz_id, answer_id) {
   return async function (dispatch) {
       axios.post('http://localhost:9000/api/quiz/answer', {quiz_id, answer_id})
         .then(res => {
